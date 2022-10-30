@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use JetBrains\PhpStorm\ArrayShape;
 
 class TestNotification extends Notification
 {
@@ -49,12 +48,12 @@ class TestNotification extends Notification
      *
      * @return array
      */
-    #[ArrayShape(['icon' => "mixed", 'message' => "string"])]
     public function toArray(mixed $notifiable): array
     {
         return [
             'icon'    => $this->icon ?? fake()->randomElement(['success', 'warning', 'danger', 'info']),
-            'message' => $this->message ?? fake()->realText(50)
+            'message' => $this->message ?? fake()->realText(50),
+            'read_at' => null,
         ];
     }
 }

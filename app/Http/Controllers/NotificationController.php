@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\NotificationResource;
-use Auth;
-use Dflydev\DotAccessData\Data;
-use Illuminate\Auth\Access\AuthorizationException;
+use App\Notifications\TestNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -25,15 +22,41 @@ class NotificationController extends Controller
     }
 
     /**
-     * @param DatabaseNotification $notification
+     * @return JsonResponse
+     */
+    public function store(): JsonResponse
+    {
+        Auth::user()->notify(new TestNotification);
+
+        return response()->json();
+    }
+
+    /**
+     * @param string $notificationID
      *
      * @return JsonResponse
      */
-    public function delete(DatabaseNotification $notification): JsonResponse
+    public function delete(string $notificationID): JsonResponse
     {
-        $notification->delete();
+        Auth::user()->notifications()->find($notificationID)->delete();
 
-        return response('', 200)->json();
+        return response()->json();
+    }
+
+    /**
+     * @param string $notificationID
+     *
+     * @return JsonResponse
+     */
+    public function markAsRead(string $notificationID): JsonResponse
+    {
+        $now = now();
+
+        Auth::user()->notifications()->find($notificationID)->update(['read_at' => $now]);
+
+        return response()->json(
+            compact('now')
+        );
     }
 
     /**
