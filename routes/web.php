@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 //There is no front-end, feel free to build your own !
@@ -13,4 +14,16 @@ Route::group([
     ],
 ], static function () {
     Route::view('dashboard', 'pages.panel.dashboard')->name('dashboard');
+
+    Route::controller(NotificationController::class)
+        ->prefix('notifications')
+        ->name('notifications.')
+        ->group(static function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/store', 'store')->name('store');
+            Route::put('/markAsRead/{id}', 'markAsRead')->name('markAsRead');
+            Route::delete('/delete/{id}', 'delete')->name('delete');
+            Route::match(['PUT', 'PATCH'], '/markAllReads', 'markAllReads')->name('markAllReads');
+            Route::delete('/deleteAll', 'deleteAll')->name('deleteAll');
+        });
 });

@@ -11,24 +11,51 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
           integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    @vite('resources/css/app.css')
     @stack('css')
 </head>
 <body class="nav-fixed">
-@include('layouts.panel.dashboard.navbar')
-<div id="layoutSidenav">
-    <div id="layoutSidenav_nav">
-        @include('layouts.panel.dashboard.sidenav')
-    </div>
-    <div id="layoutSidenav_content">
-        <main>
-            @yield('content')
-        </main>
-        @include('layouts.panel.dashboard.footer')
+<div id="app">
+    @include('layouts.panel.dashboard.navbar')
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            @include('layouts.panel.dashboard.sidenav')
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                @yield('content')
+            </main>
+            @include('layouts.panel.dashboard.footer')
+        </div>
     </div>
 </div>
 @include('sweetalert::alert')
 <script src="{{ asset('vendor/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/scripts.js') }}"></script>
+<script>
+    window.User = {{ Auth::id() }};
+    window.Locale = "{{ App::getLocale() }}";
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
+    function toast(data) {
+        Toast.fire({
+            icon: data.icon,
+            title: data.message,
+        });
+    }
+</script>
+@vite('resources/js/app.js')
 @stack('js')
 </body>
 </html>
