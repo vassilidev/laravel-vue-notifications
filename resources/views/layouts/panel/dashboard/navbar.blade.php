@@ -11,6 +11,9 @@
     <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="{{ route('panel.dashboard') }}">{{ config('app.name') }}</a>
     <!-- Navbar Items-->
     <ul class="navbar-nav align-items-center ms-auto">
+
+        <notification-dropdown :user_id="{{ Auth::id() }}"></notification-dropdown>
+
         <!-- User Dropdown-->
         <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage"
@@ -47,5 +50,6 @@
                 </form>
             </div>
         </li>
+
     </ul>
 </nav>
